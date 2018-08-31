@@ -142,40 +142,7 @@ class matrix:
 # Implement the filter function below
 
 def kalman_filter(x, P):
-    '''
-        for n in range(len(measurements)):
-        
-        # measurement update
-        z= matrix([[]])
-        z.identity(1, measurements[n])
-        Hx= H * x
-        y= z - Hx
-        S= H * P *  H.transpose() + R
-        K= P * H.transpose() * S.inverse()
-        Ky= K * y
-        x= x + Ky
-        KH= K * H
-        one= matrix([[]])
-        one.identity(KH.dimx,1)
-        P= (one - KH) * P
-
-        #print "After measurement " + str(n)
-        #print "x:"
-        #x.show()
-        #print "P:"
-        #P.show()
-        
-
-        # prediction
-        x= F * x + u
-        P= F * P * F.transpose()
-
-        #print "After prediction " + str(n)
-        #print "x:"
-        #x.show()
-        #print "P:"
-        #P.show()
-    '''
+    
     for i in range(len(measurements)):
 
         # create measurement matrix from current measurement
