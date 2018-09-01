@@ -147,7 +147,6 @@ def kalman_filter(x, P):
 
         # create measurement matrix from current measurement
         z = matrix([[measurements[i]]])
-        #z.identity(1, measurements[i])
         
         # measurement update
         
