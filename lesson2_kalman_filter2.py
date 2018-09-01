@@ -146,12 +146,16 @@ def kalman_filter(x, P):
     for i in range(len(measurements)):
 
         # create measurement matrix from current measurement
-        z = matrix([[]])
-        z.identity(1, measurements[i])
-
+        z = matrix([[measurements[i]]])
+        #z.identity(1, measurements[i])
+        
         # measurement update
+        
         H_trans = H.transpose()
-        y       = z - (H * x)
+        Hx      = H * x
+        #print("Z: " + str(z))
+        #print("Hx: " + str(Hx))
+        y       = z - Hx
         s       = H * P * H_trans + R
         s_inv   = s.inverse()
         K       = P * H_trans * s_inv
