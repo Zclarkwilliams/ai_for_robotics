@@ -149,25 +149,17 @@ def kalman_filter(x, P):
         z = matrix([[measurements[i]]])
         
         # measurement update
-        
-        H_trans = H.transpose()
-        Hx      = H * x
-        #print("Z: " + str(z))
-        #print("Hx: " + str(Hx))
-        y       = z - Hx
-        s       = H * P * H_trans + R
-        s_inv   = s.inverse()
-        K       = P * H_trans * s_inv
+        y       = z - H.transpose() * x
+        s       = R + H * P * H.transpose() 
+        K       = P * H.transpose() * s.inverse()
         x       = x + (K * y)
         P       = (I - K * H) * P
 
         # prediction
         x       = F * x + u
-        F_trans = F.transpose()
-        P       = F * P  * F_trans
+        P       = F * P  * F.transpose()
 
     return x,P
-    #return r2
 
 ############################################
 ### use the code below to test your filter!
