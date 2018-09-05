@@ -116,14 +116,25 @@ def evaluate(r, p):
 
 ####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
 
+##  STEP 1:
 # starts at 30.0, 50.0, heading north (=pi/2)
 # turns clockwise by pi/2, moves 15m
 # senses
 # turns clockwise by pi/2, moves 10m
 # senses
 
+##  STEP 2:
+# Add noise to the robot
+# Forward Noise = 5.0
+# Turn Noise    = 0.1
+# Sense Noise   = 5.0
+f_noise = 5.0
+t_noise = 0.1
+s_noise = 5.0
+
 ## My Code Here ##
 myrobot = robot()
+myrobot.set_noise(f_noise, t_noise, s_noise)
 myrobot.set(30.0, 50.0, pi/2)
 print(myrobot)
 myrobot = myrobot.move(-pi/2, 15)
