@@ -132,6 +132,12 @@ f_noise = 5.0
 t_noise = 0.1
 s_noise = 5.0
 
+##  STEP 3
+# Create a list of particles of size N=1000
+# N = 1000
+# P = []
+
+'''
 ## My Code Here ##
 myrobot = robot()
 myrobot.set_noise(f_noise, t_noise, s_noise)
@@ -143,9 +149,12 @@ print(myrobot.sense())
 myrobot = myrobot.move(-pi/2, 10)
 print(myrobot)
 print(myrobot.sense())
+'''
 
-'''
-output to match:
-[39.0512, 46.0978, 39.051, 46.0978]
-[32.0156, 53.1507, 47.169, 40.3113]
-'''
+N = 1000
+P = []
+
+for i in range(0, N):
+    P.append(0)
+
+print(len(P))
