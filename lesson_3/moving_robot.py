@@ -128,14 +128,28 @@ def evaluate(r, p):
 # Forward Noise = 5.0
 # Turn Noise    = 0.1
 # Sense Noise   = 5.0
-f_noise = 5.0
-t_noise = 0.1
-s_noise = 5.0
 
 ##  STEP 3
 # Create a list of particles of size N=1000
 # N = 1000
 # P = []
+
+##  STEP 4
+# Make the particles generated in STEP 3 move
+# turn by 0.1
+# forward by 5
+
+##  STEP 5
+# Generate the importance weights for particles
+# Use measure_prob function
+# set noise to 0.05, 0.05, 5
+# Forward Noise = 0.05
+# Turn Noise    = 0.05
+# Sense Noise   = 5.0
+
+##  STEP 6
+# Make it so that the particles with the smallest
+# importance weight are sampled less frequently
 
 '''
 ## My Code Here ##
@@ -151,10 +165,65 @@ print(myrobot)
 print(myrobot.sense())
 '''
 
+f_noise = 5.0
+t_noise = 0.1
+s_noise = 5.0
+
 N = 1000
-P = []
+p = []
 
+# Generate paticles and configure
 for i in range(0, N):
-    P.append(0)
+    x = robot()
+    x.set_noise(f_noise, t_noise, s_noise)
+    p.append(x)
 
-print(len(P))
+# Move the particles
+p2 = []
+for i in range(len(p)):
+    p2.append(p[i].move(0.1, 5.0))
+p = p2
+
+# Calculate the particle measurement importnace weights
+w = []
+for i in range(len(p)):
+    w.append(p[i].measurement_prob(p[i].sense()))
+
+'''
+for i in range(len(p)):
+    print(p[i])
+    print(w[i])
+'''
+
+# Normalize the particle importance weights
+w_norm = []
+for i in range(len(w)):
+    w_norm.append(w[i]/sum(w))
+
+# Resampling according to all particles and weights
+'''
+p3 = []
+for i in range(len(p)):
+    curr_sum = 0.
+    val_lim = random.random()
+    for j in range(len(p)):
+        curr_sum += w_norm[j]
+        if val_lim < curr_sum:
+            p3.append(p[j])
+            break
+'''
+
+# Resampling wheel 
+w_max = max(w)
+idx = int(random.random() * N)
+p3 = []
+b = 0.
+for i in range(len(p)):
+    b += random.random() * 2.0 * w_max
+    while w[i] < b:
+        b -= w[i]
+        idx = (idx + 1) % N
+    p3.append(p[idx])
+
+
+print(p3)
