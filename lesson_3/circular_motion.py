@@ -70,7 +70,7 @@ class robot:
     def set(self, new_x, new_y, new_orientation):
 
         if new_orientation < 0 or new_orientation >= 2 * pi:
-            raise ValueError, 'Orientation must be in [0..2pi]'
+            raise ValueError('Orientation must be in [0..2pi]')
         self.x = float(new_x)
         self.y = float(new_y)
         self.orientation = float(new_orientation)
@@ -95,11 +95,40 @@ class robot:
     #   move along a section of a circular path according to motion
     #
     
-    def move(self, motion): # Do not change the name of this function
+    def move(self, motion, tolerance = 0.001): # Do not change the name of this function
 
         # ADD CODE HERE
         
-        return result # make sure your move function returns an instance
+        steering = motion[0]
+        distance = motion[0]
+
+        if distance < 0.0:
+            raise ValueError('Moving backwards is not valid')
+
+        rob = robot()
+        rob.length = self.length
+        rob.bearing_noise = self.bearing_noise
+        rob.steering_noise = self.steering_noise
+        rob.distance_noise = self.distance_noise        
+
+        steering2 = random.gauss(steering, self.steering_noise)
+        distance2 = random.gauss(distance, self.distance_noise)
+
+        turn = tan(steering2) * distance2/rob.length
+        
+        if abs(turn) < tolerance: # Approx. a straight line motion
+            rob.x = self.x + (distance2 * cos(self.orientation))
+            rob.y = self.y + (distance2 * sin(self.orientation))
+            rob.orientation = (self.orientation + turn) % (2.0*pi)
+        else: # We turn!
+            R = distance2/turn
+            CX = self.x - (sin(self.orientation) * R)
+            CY = self.y + (cos(self.orientation) * R)
+            rob.orientation = (self.orientation + turn) % (2.0*pi)
+            rob.x = CX + (sin(rob.orientation) * R)
+            rob.y = CY - (cos(rob.orientation) * R)
+        
+        return rob # make sure your move function returns an instance
                       # of the robot class with the correct coordinates.
                       
     ############## ONLY ADD/MODIFY CODE ABOVE HERE ####################
@@ -160,23 +189,23 @@ class robot:
 ##      Robot:     [x=83.736 y=46.485 orient=1.0135]
 ##
 ##
-##length = 20.
-##bearing_noise  = 0.0
-##steering_noise = 0.0
-##distance_noise = 0.0
+length = 20.
+bearing_noise  = 0.0
+steering_noise = 0.0
+distance_noise = 0.0
 ##
-##myrobot = robot(length)
-##myrobot.set(0.0, 0.0, 0.0)
-##myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
+myrobot = robot(length)
+myrobot.set(0.0, 0.0, 0.0)
+myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
 ##
-##motions = [[0.2, 10.] for row in range(10)]
+motions = [[0.2, 10.] for row in range(10)]
 ##
-##T = len(motions)
+T = len(motions)
 ##
-##print 'Robot:    ', myrobot
-##for t in range(T):
-##    myrobot = myrobot.move(motions[t])
-##    print 'Robot:    ', myrobot
+print ('Robot:    ', myrobot)
+for t in range(T):
+    myrobot = myrobot.move(motions[t])
+    print ('Robot:    ', myrobot)
 
 ## IMPORTANT: You may uncomment the test cases below to test your code.
 ## But when you submit this code, your test cases MUST be commented
