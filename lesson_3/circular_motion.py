@@ -100,7 +100,7 @@ class robot:
         # ADD CODE HERE
         
         steering = motion[0]
-        distance = motion[0]
+        distance = motion[1]
 
         if distance < 0.0:
             raise ValueError('Moving backwards is not valid')
